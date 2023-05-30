@@ -60,6 +60,20 @@ class CalcController{
         let result = eval(this._operation.join("")); 
 
         this._operation = [result, last];
+
+        this.setLastNumberToDisplay();
+    }
+
+    setLastNumberToDisplay(){
+        let lastNumber;
+
+        for (let i = this._operation.length - 1; i >= 0; i--){
+            if(!this.isOperator(this._operation[i])){
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
+        this.displayCalc = lastNumber;
     }
 
     addOperation(value){
@@ -70,6 +84,7 @@ class CalcController{
                 console.log("Outra coisa", value);
             } else {
                 this.pushOperation(value);
+                this.setLastNumberToDisplay();
             }
         } else {
             if (this.isOperator(value)){
@@ -78,13 +93,13 @@ class CalcController{
                 let newValue = this.getLastOperation().toString() + value.toString();
                 this.setLastOperation(parseInt(newValue));
 
-                this.setLastNumberToDisplay(newValue);
+                this.setLastNumberToDisplay();
             }
         }
     }
 
     setError(){
-        this.displayCalcEl = "ERROR";
+        this.displayCalc = "ERROR";
     }
 
     execBtn(value){
@@ -116,16 +131,16 @@ class CalcController{
             case "ponto": 
                 this.addOperation(".");
                 break;
-            case "0": ;
-            case "1": ;
-            case "2": ;
-            case "3": ;
-            case "4": ;
-            case "5": ;
-            case "6": ;
-            case "7": ;
-            case "8": ;
-            case "9": ;
+            case "0": 
+            case "1": 
+            case "2": 
+            case "3": 
+            case "4": 
+            case "5": 
+            case "6": 
+            case "7": 
+            case "8": 
+            case "9": 
                 this.addOperation(parseInt(value));
                 break;
             default:
@@ -139,7 +154,7 @@ class CalcController{
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
 
         buttons.forEach((btn, index) => {
-            this.addEventListenerAll(btn, "drag click", e => {
+            this.addEventListenerAll(btn, "click drag", e => {
                 let textBtn = btn.className.baseVal.replace("btn-", "");
                 this.execBtn(textBtn);
             });
@@ -147,6 +162,7 @@ class CalcController{
                 btn.style.cursor = "pointer";
             });
         });
+
     }
 
     setDisplayDateTime(){
@@ -178,8 +194,8 @@ class CalcController{
         return this._displayCalc.innerHTML;
     }
 
-    set displayCalcEl(value){
-        return this._displayCalcEl.innerHTML = value;
+    set displayCalc(value){
+        this._displayCalcEl.innerHTML = value;
     }
 
     get currentDate(){
