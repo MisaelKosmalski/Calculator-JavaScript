@@ -204,8 +204,15 @@ class CalcController {
     }
 
     getResult(){
+        try{
 
         return eval(this._operation.join(""));
+        
+        } catch(SyntaxError){
+        
+            this.clearAll();
+
+        }
 
     }
 
